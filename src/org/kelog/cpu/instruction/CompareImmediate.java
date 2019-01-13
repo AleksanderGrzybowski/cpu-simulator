@@ -23,5 +23,6 @@ public class CompareImmediate extends Instruction {
         } else {
             state.setFlag(Flag.LESS, true);
         }
+        state.nextInstruction();
     }
 }

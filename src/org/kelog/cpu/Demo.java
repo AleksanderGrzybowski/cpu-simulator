@@ -14,7 +14,7 @@ public class Demo {
     }
     
     static void factorial() {
-        Program program = new Program()
+        Program program = new Program.Builder()
                 .instruction(new AddImmediate(R0, 5))
                 .instruction(new AddImmediate(R1, 1))
                 .instruction(new AddImmediate(Register.R2, 1))
@@ -23,15 +23,15 @@ public class Demo {
                 .instruction(new MultiplyRegisters(R1, R0))
                 .instruction(new AddImmediate(R0, -1))
                 .instruction(new Jump("loop_1"))
-                .withLabel("end", new Exit());
+                .withLabel("end", new Exit())
+                .build();
         
         runProgram(program);
         
     }
     
-    static void fibonacci() {
-        
-        Program program = new Program()
+    private static void fibonacci() {
+        Program program = new Program.Builder()
                 .instruction(new MoveImmediate(R0, 0))
                 .instruction(new MoveImmediate(R1, 1))
                 .instruction(new MoveImmediate(R6, 0))
@@ -45,7 +45,8 @@ public class Demo {
                 .instruction(new MoveRegisters(R1, R2))
                 .instruction(new AddImmediate(R7, -1))
                 .instruction(new Jump("loop_1"))
-                .withLabel("end", new Exit());
+                .withLabel("end", new Exit())
+                .build();
         
         runProgram(program);
         

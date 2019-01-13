@@ -47,7 +47,7 @@ public class CpuState {
     }
     
     public void jumpToLabel(String label) {
-        nextInstructionNumber = program.getIdForLabel(label);
+        nextInstructionNumber = program.getLabelInstructionNumber(label);
     }
     
     private <T, U> Map<T, U> makeMap(T[] values, U defaultValue) {

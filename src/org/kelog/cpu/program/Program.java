@@ -7,26 +7,49 @@ import java.util.List;
 import java.util.Objects;
 
 public class Program {
-    List<ProgramInstruction> programInstructions = new ArrayList<>();
+    private final List<ProgramInstruction> instructions;
     
-    public Program instruction(Instruction instruction) {
-        programInstructions.add(new ProgramInstruction(instruction));
-        return this;
+    private Program(List<ProgramInstruction> instructions) {
+        this.instructions = instructions;
     }
     
-    public Program withLabel(String label, Instruction instruction) {
-        programInstructions.add(new ProgramInstruction(label, instruction));
-        return this;
-    }
-    
-    public int getIdForLabel(String label) {
-        for (int i = 0; i < programInstructions.size(); i++) {
-            if (Objects.equals(programInstructions.get(i).label, label)) return i;
+    public int getLabelInstructionNumber(String label) {
+        for (int number = 0; number < instructions.size(); number++) {
+            if (Objects.equals(instructions.get(number).label, label)) {
+                return number;
+            }
         }
-        return -1;
+        throw new AssertionError("No such label " + label);
     }
     
     public Instruction getInstruction(int number) {
-        return programInstructions.get(number).instruction;
+        return instructions.get(number).instruction;
+    }
+    
+    public static class Builder {
+        private final List<ProgramInstruction> instructions = new ArrayList<>();
+        
+        public Builder instruction(Instruction instruction) {
+            return withLabel(null, instruction);
+        }
+        
+        public Builder withLabel(String label, Instruction instruction) {
+            instructions.add(new ProgramInstruction(label, instruction));
+            return this;
+        }
+        
+        public Program build() {
+            return new Program(instructions);
+        }
+    }
+    
+    private static class ProgramInstruction {
+        final String label;
+        final Instruction instruction;
+        
+        ProgramInstruction(String label, Instruction instruction) {
+            this.label = label;
+            this.instruction = instruction;
+        }
     }
 }
