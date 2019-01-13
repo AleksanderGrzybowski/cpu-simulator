@@ -1,0 +1,10 @@
+
+      mov r0, 5
+      mov r1, 1
+loop: cmp r0, 1
+      je end
+      mul r1, r0
+      add r0, -1
+      jmp loop
+end:  exit
+

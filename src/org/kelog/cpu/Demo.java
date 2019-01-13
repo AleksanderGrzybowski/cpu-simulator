@@ -2,19 +2,25 @@ package org.kelog.cpu;
 
 import org.kelog.cpu.core.Register;
 import org.kelog.cpu.instruction.*;
+import org.kelog.cpu.program.FileProgramBuilder;
+import org.kelog.cpu.program.InlineProgramBuilder;
 import org.kelog.cpu.program.Program;
+
+import java.io.IOException;
 
 import static org.kelog.cpu.core.Controller.runProgram;
 import static org.kelog.cpu.core.Register.*;
 
 @SuppressWarnings("unused")
 public class Demo {
-    public static void main(String[] args) {
-        fibonacci();
+    
+    public static void main(String[] args) throws IOException {
+        Program program = new FileProgramBuilder().loadFile("test.txt");
+        runProgram(program);
     }
     
     static void factorial() {
-        Program program = new Program.Builder()
+        Program program = new InlineProgramBuilder()
                 .instruction(new AddImmediate(R0, 5))
                 .instruction(new AddImmediate(R1, 1))
                 .instruction(new AddImmediate(Register.R2, 1))
@@ -31,7 +37,7 @@ public class Demo {
     }
     
     private static void fibonacci() {
-        Program program = new Program.Builder()
+        Program program = new InlineProgramBuilder()
                 .instruction(new MoveImmediate(R0, 0))
                 .instruction(new MoveImmediate(R1, 1))
                 .instruction(new MoveImmediate(R6, 0))
