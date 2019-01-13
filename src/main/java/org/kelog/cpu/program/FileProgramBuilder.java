@@ -6,6 +6,7 @@ import org.kelog.cpu.instruction.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Integer.parseInt;
@@ -13,12 +14,16 @@ import static java.util.stream.Collectors.toList;
 
 public class FileProgramBuilder {
     
-    public Program loadFile(String filename) throws IOException {
-        return new Program(parse(filename));
+    public Program loadFromFile(String filename) throws IOException {
+        return new Program(parse(Files.readAllLines(Paths.get(filename))));
     }
     
-    private List<ProgramInstruction> parse(String filename) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(filename)).stream()
+    public Program loadFromString(String content) throws IOException {
+        return new Program(parse(Arrays.stream(content.split("\n")).collect(toList())));
+    }
+    
+    private List<ProgramInstruction> parse(List<String> inputLines) throws IOException {
+        List<String> lines = inputLines.stream()
                 .filter(line -> line.trim().length() != 0)
                 .map(String::trim)
                 .collect(toList());

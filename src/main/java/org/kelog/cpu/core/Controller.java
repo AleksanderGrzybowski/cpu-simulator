@@ -5,7 +5,7 @@ import org.kelog.cpu.program.Program;
 
 public class Controller {
     
-    public static void runProgram(Program program) {
+    public static CpuState runProgram(Program program) {
         CpuState state = new CpuState(program);
         System.out.println("Initial state:");
         System.out.println(state);
@@ -16,16 +16,8 @@ public class Controller {
             
             instruction.executeAndIncrementCycle(state);
             System.out.println(state);
-            
-            sleep();
         }
-    }
-    
-    private static void sleep() {
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        
+        return state;
     }
 }
