@@ -28,4 +28,9 @@ public class CompareRegisters extends Instruction {
         
         state.nextInstruction();
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "cmp " + first.mnemonic() + ", " + second.mnemonic();
+    }
 }

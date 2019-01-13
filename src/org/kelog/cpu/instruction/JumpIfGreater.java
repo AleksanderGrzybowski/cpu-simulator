@@ -22,4 +22,9 @@ public class JumpIfGreater extends Instruction {
             state.nextInstruction();
         }
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "jg " + label;
+    }
 }

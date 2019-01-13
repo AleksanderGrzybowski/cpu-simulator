@@ -18,4 +18,9 @@ public class MultiplyImmediate extends Instruction {
         state.setRegister(target, state.getRegister(target) * value);
         state.nextInstruction();
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "mul " + target.mnemonic() + ", " + value;
+    }
 }

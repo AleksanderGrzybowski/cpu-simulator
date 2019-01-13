@@ -9,4 +9,9 @@ public class Exit extends Instruction {
     public void execute(CpuState state) {
         state.setFlag(Flag.EXIT, true);
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "exit";
+    }
 }

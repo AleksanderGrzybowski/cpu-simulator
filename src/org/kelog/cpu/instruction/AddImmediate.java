@@ -18,4 +18,9 @@ public class AddImmediate extends Instruction {
         state.setRegister(target, state.getRegister(target) + value);
         state.nextInstruction();
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "add " + target.mnemonic() + ", " + value;
+    }
 }

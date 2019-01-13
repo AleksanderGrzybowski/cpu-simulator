@@ -17,4 +17,9 @@ public class MoveRegisters extends Instruction {
         state.setRegister(target, state.getRegister(source));
         state.nextInstruction();
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "mov " + target.mnemonic() + ", " + source.mnemonic();
+    }
 }

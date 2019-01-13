@@ -22,4 +22,9 @@ public class JumpIfEqual extends Instruction {
             state.nextInstruction();
         }
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "je " + label;
+    }
 }

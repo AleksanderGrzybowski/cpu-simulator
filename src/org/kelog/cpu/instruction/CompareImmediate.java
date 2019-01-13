@@ -25,4 +25,9 @@ public class CompareImmediate extends Instruction {
         }
         state.nextInstruction();
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "cmp " + first.mnemonic() + ", " + value;
+    }
 }

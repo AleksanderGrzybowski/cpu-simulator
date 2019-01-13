@@ -18,4 +18,9 @@ public class MoveImmediate extends Instruction {
         state.setRegister(target, value);
         state.nextInstruction();
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "mov " + target.mnemonic() + ", " + value;
+    }
 }

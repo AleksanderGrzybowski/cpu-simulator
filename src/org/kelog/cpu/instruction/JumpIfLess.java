@@ -22,4 +22,9 @@ public class JumpIfLess extends Instruction {
             state.nextInstruction();
         }
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "jl " + label;
+    }
 }

@@ -17,4 +17,9 @@ public class AddRegisters extends Instruction {
         state.setRegister(target, state.getRegister(target) + state.getRegister(source));
         state.nextInstruction();
     }
+    
+    @Override
+    public String toMnemonic() {
+        return "add " + target.mnemonic() + ", " + source.mnemonic();
+    }
 }

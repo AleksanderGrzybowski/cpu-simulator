@@ -90,7 +90,7 @@ public class FileProgramBuilder {
         }
         
         if (mnemonic.equals("jmp")) {
-            return new ProgramInstruction(label, new Jump(label));
+            return new ProgramInstruction(label, new Jump(firstArg));
         }
         
         if (mnemonic.equals("je")) {
