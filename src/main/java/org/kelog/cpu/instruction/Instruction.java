@@ -9,6 +9,6 @@ public abstract class Instruction {
     
     public void executeAndIncrementCycle(CpuState state) {
         execute(state);
-        state.incrementCycleCount();
+        state.cycleExecuted();
     }
 }
