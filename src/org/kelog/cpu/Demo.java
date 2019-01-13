@@ -1,13 +1,13 @@
 package org.kelog.cpu;
 
-import org.kelog.cpu.core.CpuState;
-import org.kelog.cpu.core.Flag;
 import org.kelog.cpu.core.Register;
 import org.kelog.cpu.instruction.*;
 import org.kelog.cpu.program.Program;
 
+import static org.kelog.cpu.core.Controller.runProgram;
+
 public class Demo {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
         
         Program program = new Program()
                 .instruction(new AddImmediate(Register.R0, 5))
@@ -20,12 +20,6 @@ public class Demo {
                 .instruction(new Jump("loop_1"))
                 .withLabel("end", new Exit());
         
-        CpuState state = new CpuState(program);
-        
-        while (!state.getFlag(Flag.EXIT)) {
-            program.getInstruction(state.getNextInstructionNumber()).executeAndIncrementCycle(state);
-            System.out.println(state);
-            Thread.sleep(100);
-        }
+        runProgram(program);
     }
 }
