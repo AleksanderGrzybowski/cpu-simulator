@@ -3,11 +3,11 @@ package org.kelog.cpu.core;
 import org.kelog.cpu.program.Program;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toMap;
 
 public class CpuState {
@@ -71,20 +71,22 @@ public class CpuState {
         nextInstructionNumber = program.getLabelInstructionNumber(label);
     }
     
-    @SuppressWarnings("StringConcatenationInLoop")
     @Override
     public String toString() {
-        String registers = this.registers.entrySet().stream()
-                .sorted(Comparator.comparing(Map.Entry::getKey))
-                .map(e -> e.getKey() + ": " + formatNumber(e.getValue()))
-                .collect(Collectors.joining(" | "));
+        String registerLabels = Arrays.stream(Register.values()).map(r -> r.name().toLowerCase()).collect(joining("    "));
+        String registerValues = Arrays.stream(Register.values())
+                .map(r -> formatNumber(registers.get(r)))
+                .collect(joining("  "));
         
-        String memoryString = "";
-        for (int i = 0; i < memory.length; i++) {
-            memoryString += i + ": " + formatNumber(memory[i]) + " | ";
-        }
+        String memoryLabels = IntStream.range(0, memory.length).mapToObj(CpuState::formatNumber).collect(joining("  "));
+        String memoryValues = Arrays.stream(memory).mapToObj(CpuState::formatNumber).collect(joining("  "));
         
-        return "Cycle: " + formatNumber(cycleCount) + " | Instruction: " + formatNumber(nextInstructionNumber) + " | " + registers + "\n" + memoryString;
+        return "-----------------------------------------\n" +
+                "Cycle: " + formatNumber(cycleCount) + "\n" +
+                "Instr: " + formatNumber(nextInstructionNumber) + "\n" +
+                "Registers:  " + registerLabels + "\n          " + registerValues + "\n\n" +
+                "Memory:   " + memoryLabels + "\n          " + memoryValues +
+                "\n-----------------------------------------";
     }
     
     public void cycleExecuted() {
