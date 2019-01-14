@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 public class FileBasedTests {
     
     private ProgramBuilder builder = new ProgramBuilder();
-    private Runner runner = Runner.withLogging(false);
+    private Runner runner = Runner.withLogging(true);
     
     @Test
     public void factorial() {
@@ -25,6 +25,14 @@ public class FileBasedTests {
     public void fibonacci() {
         CpuState finalState = runner.runToCompletion(builder.fromSource(readResource("fibonacci.txt")));
         assertEquals(89, finalState.getRegister(Register.R1));
+    }
+    
+    @Test
+    public void fillmemory() {
+        CpuState finalState = runner.runToCompletion(builder.fromSource(readResource("fillmemory.txt")));
+        for (int i = 0; i < 16; i++) {
+            assertEquals(i, finalState.getMemoryAt(i));
+        }
     }
     
     private String readResource(String filename) {

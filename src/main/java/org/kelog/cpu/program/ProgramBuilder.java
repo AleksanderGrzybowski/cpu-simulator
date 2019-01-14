@@ -130,6 +130,23 @@ public class ProgramBuilder {
             }
         }
         
+        if (mnemonic.equals("get")) {
+            if (secondArg.startsWith("r")) {
+                return new ProgramInstruction(label, new GetIndirect(toRegister(firstArg), toRegister(secondArg)));
+            } else {
+                return new ProgramInstruction(label, new GetImmediate(toRegister(firstArg), parseInt(secondArg)));
+            }
+        }
+        
+        if (mnemonic.equals("put")) {
+            if (firstArg.startsWith("r") && secondArg.startsWith("r")) {
+                return new ProgramInstruction(label, new PutIndirect(toRegister(firstArg), toRegister(secondArg)));
+            } else if (secondArg.startsWith("r")) {
+                return new ProgramInstruction(label, new PutRegister(parseInt(firstArg), toRegister(secondArg)));
+            } else {
+                return new ProgramInstruction(label, new PutImmediate(parseInt(firstArg), parseInt(secondArg)));
+            }
+        }
         
         throw new AssertionError("Unknown instruction " + mnemonic);
     }
