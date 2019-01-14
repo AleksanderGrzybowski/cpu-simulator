@@ -18,10 +18,19 @@ public class CompareImmediate extends Instruction {
     public void execute(CpuState state) {
         if (value == state.getRegister(this.first)) {
             state.setFlag(Flag.EQUAL, true);
+            
+            state.setFlag(Flag.GREATER, false);
+            state.setFlag(Flag.LESS, false);
         } else if (value > state.getRegister(this.first)) {
             state.setFlag(Flag.GREATER, true);
+            
+            state.setFlag(Flag.EQUAL, false);
+            state.setFlag(Flag.LESS, false);
         } else {
             state.setFlag(Flag.LESS, true);
+            
+            state.setFlag(Flag.GREATER, false);
+            state.setFlag(Flag.EQUAL, false);
         }
         state.nextInstruction();
     }

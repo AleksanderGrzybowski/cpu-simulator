@@ -20,10 +20,19 @@ public class CompareRegisters extends Instruction {
         
         if (firstValue == secondValue) {
             state.setFlag(Flag.EQUAL, true);
+            
+            state.setFlag(Flag.GREATER, false);
+            state.setFlag(Flag.LESS, false);
         } else if (firstValue > secondValue) {
             state.setFlag(Flag.GREATER, true);
+            
+            state.setFlag(Flag.EQUAL, false);
+            state.setFlag(Flag.LESS, false);
         } else {
             state.setFlag(Flag.LESS, true);
+            
+            state.setFlag(Flag.GREATER, false);
+            state.setFlag(Flag.EQUAL, false);
         }
         
         state.nextInstruction();
