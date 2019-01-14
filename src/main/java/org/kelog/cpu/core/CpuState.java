@@ -81,9 +81,12 @@ public class CpuState {
         String memoryLabels = IntStream.range(0, memory.length).mapToObj(CpuState::formatNumber).collect(joining("  "));
         String memoryValues = Arrays.stream(memory).mapToObj(CpuState::formatNumber).collect(joining("  "));
         
+        String flagValues = Arrays.stream(Flag.values()).map(f -> f.name() + "=" + flags.get(f)).collect(joining(" "));
+        
         return "-----------------------------------------\n" +
                 "Cycle: " + formatNumber(cycleCount) + "\n" +
                 "Instr: " + formatNumber(nextInstructionNumber) + "\n" +
+                "Flags: " + flagValues + "\n" +
                 "Registers:  " + registerLabels + "\n          " + registerValues + "\n\n" +
                 "Memory:   " + memoryLabels + "\n          " + memoryValues +
                 "\n-----------------------------------------";
