@@ -1,12 +1,16 @@
 package org.kelog.cpu.program;
 
-import org.apache.commons.io.FileUtils;
 import org.kelog.cpu.core.Register;
-import org.kelog.cpu.instruction.*;
+import org.kelog.cpu.instruction.Exit;
+import org.kelog.cpu.instruction.MoveImmediate;
+import org.kelog.cpu.instruction.MoveRegisters;
+import org.kelog.cpu.instruction.arithmetic.*;
+import org.kelog.cpu.instruction.jumps.Jump;
+import org.kelog.cpu.instruction.jumps.JumpIfEqual;
+import org.kelog.cpu.instruction.jumps.JumpIfGreater;
+import org.kelog.cpu.instruction.jumps.JumpIfLess;
+import org.kelog.cpu.instruction.memory.*;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -16,17 +20,13 @@ import static java.util.stream.Collectors.toList;
 
 public class ProgramBuilder {
     
-    public Program fromFile(String filename) throws IOException {
-        return fromSource(FileUtils.readFileToString(new File(filename), StandardCharsets.UTF_8));
-    }
-    
     public Program fromSource(String sourceContent) {
         return new Program(parse(
                 Arrays.stream(sourceContent.split("\n")).collect(toList())
         ));
     }
     
-    public List<ProgramInstruction> parse(List<String> lines) {
+    private List<ProgramInstruction> parse(List<String> lines) {
         return lines.stream()
                 .map(String::trim)
                 .filter(line -> !line.isEmpty())

@@ -1,22 +1,25 @@
-package org.kelog.cpu.instruction;
+package org.kelog.cpu.instruction.jumps;
 
 import org.kelog.cpu.core.CpuState;
-import org.kelog.cpu.core.Flag;
+import org.kelog.cpu.instruction.Instruction;
 
 import static java.util.Objects.requireNonNull;
 
-public class JumpIfLess extends Instruction {
+public abstract class ConditionalJump extends Instruction {
     
     private final String label;
     
-    public JumpIfLess(String label) {
+    ConditionalJump(String label) {
         requireNonNull(label);
         this.label = label;
     }
     
+    public abstract boolean shouldJump(CpuState state);
+    public abstract String getBaseMnemonic();
+    
     @Override
     public void execute(CpuState state) {
-        if (state.getFlag(Flag.LESS)) {
+        if (shouldJump(state)) {
             state.jumpToLabel(label);
         } else {
             state.nextInstruction();
@@ -25,6 +28,6 @@ public class JumpIfLess extends Instruction {
     
     @Override
     public String toMnemonic() {
-        return "jl " + label;
+        return getBaseMnemonic() + " " + label;
     }
 }

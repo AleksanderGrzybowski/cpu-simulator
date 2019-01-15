@@ -1,7 +1,8 @@
-package org.kelog.cpu.instruction;
+package org.kelog.cpu.instruction.memory;
 
 import org.kelog.cpu.core.CpuState;
 import org.kelog.cpu.core.Register;
+import org.kelog.cpu.instruction.Instruction;
 
 public class PutIndirect extends Instruction {
     

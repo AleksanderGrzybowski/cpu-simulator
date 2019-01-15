@@ -1,6 +1,7 @@
-package org.kelog.cpu.instruction;
+package org.kelog.cpu.instruction.jumps;
 
 import org.kelog.cpu.core.CpuState;
+import org.kelog.cpu.instruction.Instruction;
 
 import static java.util.Objects.requireNonNull;
 

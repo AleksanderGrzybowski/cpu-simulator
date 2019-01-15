@@ -1,7 +1,8 @@
-package org.kelog.cpu.instruction;
+package org.kelog.cpu.instruction.arithmetic;
 
 import org.kelog.cpu.core.CpuState;
 import org.kelog.cpu.core.Register;
+import org.kelog.cpu.instruction.Instruction;
 
 public class AddRegisters extends Instruction {
     

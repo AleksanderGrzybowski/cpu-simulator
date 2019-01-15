@@ -1,36 +1,32 @@
-package org.kelog.cpu.instruction;
+package org.kelog.cpu.instruction.arithmetic;
 
 import org.kelog.cpu.core.CpuState;
 import org.kelog.cpu.core.Flag;
 import org.kelog.cpu.core.Register;
+import org.kelog.cpu.instruction.Instruction;
 
-public class CompareRegisters extends Instruction {
+public class CompareImmediate extends Instruction {
     
-    private final Register first, second;
+    private final Register first;
+    private final int value;
     
-    public CompareRegisters(Register first, Register second) {
+    public CompareImmediate(Register first, int value) {
         this.first = first;
-        this.second = second;
+        this.value = value;
     }
     
     @Override
     public void execute(CpuState state) {
-        int firstValue = state.getRegister(first);
-        int secondValue = state.getRegister(second);
-        
-        if (firstValue == secondValue) {
+        if (value == state.getRegister(this.first)) {
             state.setFlag(Flag.EQUAL, true);
-            
             state.setFlag(Flag.GREATER, false);
             state.setFlag(Flag.LESS, false);
-        } else if (firstValue > secondValue) {
+        } else if (value > state.getRegister(this.first)) {
             state.setFlag(Flag.GREATER, true);
-            
             state.setFlag(Flag.EQUAL, false);
             state.setFlag(Flag.LESS, false);
         } else {
             state.setFlag(Flag.LESS, true);
-            
             state.setFlag(Flag.GREATER, false);
             state.setFlag(Flag.EQUAL, false);
         }
@@ -40,6 +36,6 @@ public class CompareRegisters extends Instruction {
     
     @Override
     public String toMnemonic() {
-        return "cmp " + first.mnemonic() + ", " + second.mnemonic();
+        return "cmp " + first.mnemonic() + ", " + value;
     }
 }

@@ -3,25 +3,30 @@ package org.kelog.cpu.core;
 import org.kelog.cpu.program.Program;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
-import static java.util.stream.Collectors.toMap;
 
 public class CpuState {
     
     private final Program program;
-    private final Map<Register, Integer> registers = makeMap(Register.values(), 0);
-    private final Map<Flag, Boolean> flags = makeMap(Flag.values(), false);
-    private final int[] memory = new int[16];
+    private final Map<Register, Integer> registers = Utils.makeMap(Register.values(), 0);
+    private final Map<Flag, Boolean> flags = Utils.makeMap(Flag.values(), false);
+    private final int[] memory;
     
     private int nextInstructionNumber = 0;
     private int cycleCount = 0;
     
-    public CpuState(Program program) {
+    private CpuState(Program program, int[] initialMemory) {
         this.program = program;
+        this.memory = initialMemory;
+    }
+    
+    int getNextInstructionNumber() {
+        return nextInstructionNumber;
     }
     
     public void nextInstruction() {
@@ -62,45 +67,57 @@ public class CpuState {
         memory[cellNumber] = value;
     }
     
-    int getNextInstructionNumber() {
-        return nextInstructionNumber;
-    }
-    
     public void jumpToLabel(String label) {
         requireNonNull(label);
         nextInstructionNumber = program.getLabelInstructionNumber(label);
-    }
-    
-    @Override
-    public String toString() {
-        String registerLabels = Arrays.stream(Register.values()).map(r -> r.name().toLowerCase()).collect(joining("    "));
-        String registerValues = Arrays.stream(Register.values())
-                .map(r -> formatNumber(registers.get(r)))
-                .collect(joining("  "));
-        
-        String memoryLabels = IntStream.range(0, memory.length).mapToObj(CpuState::formatNumber).collect(joining("  "));
-        String memoryValues = Arrays.stream(memory).mapToObj(CpuState::formatNumber).collect(joining("  "));
-        
-        String flagValues = Arrays.stream(Flag.values()).map(f -> f.name() + "=" + flags.get(f)).collect(joining(" "));
-        
-        return "-----------------------------------------\n" +
-                "Cycle: " + formatNumber(cycleCount) + "\n" +
-                "Instr: " + formatNumber(nextInstructionNumber) + "\n" +
-                "Flags: " + flagValues + "\n" +
-                "Registers:  " + registerLabels + "\n          " + registerValues + "\n\n" +
-                "Memory:   " + memoryLabels + "\n          " + memoryValues +
-                "\n-----------------------------------------";
     }
     
     public void cycleExecuted() {
         cycleCount++;
     }
     
-    private static String formatNumber(int number) {
-        return String.format("%4d", number);
+    @Override
+    public String toString() {
+        String registerLabels = Arrays.stream(Register.values()).map(r -> r.name().toLowerCase()).collect(joining("    "));
+        String registerValues = Arrays.stream(Register.values())
+                .map(r -> Utils.formatNumber(registers.get(r)))
+                .collect(joining("  "));
+        
+        String memoryLabels = IntStream.range(0, memory.length).mapToObj(Utils::formatNumber).collect(joining("  "));
+        String memoryValues = Arrays.stream(memory).mapToObj(Utils::formatNumber).collect(joining("  "));
+        
+        String flagValues = Arrays.stream(Flag.values()).map(f -> f.name() + "=" + flags.get(f)).collect(joining(" "));
+        
+        return "-----------------------------------------\n" +
+                "Cycle: " + Utils.formatNumber(cycleCount) + "\n" +
+                "Instr: " + Utils.formatNumber(nextInstructionNumber) + "\n" +
+                "Flags: " + flagValues + "\n" +
+                "Registers:  " + registerLabels + "\n          " + registerValues + "\n\n" +
+                "Memory:   " + memoryLabels + "\n          " + memoryValues +
+                "\n-----------------------------------------";
     }
     
-    private <T, U> Map<T, U> makeMap(T[] values, U defaultValue) {
-        return Arrays.stream(values).collect(toMap(k -> k, v -> defaultValue));
+    static class Builder {
+        private Program program;
+        private List<Integer> initialMemory;
+        
+        Builder withProgram(Program program) {
+            this.program = program;
+            return this;
+        }
+        
+        Builder withInitialMemory(List<Integer> initialMemory) {
+            this.initialMemory = initialMemory;
+            return this;
+        }
+        
+        CpuState build() {
+            int[] memory = new int[initialMemory.size()];
+            for (int i = 0; i < initialMemory.size(); i++) {
+                memory[i] = initialMemory.get(i);
+            }
+            
+            return new CpuState(program, memory);
+        }
     }
 }
