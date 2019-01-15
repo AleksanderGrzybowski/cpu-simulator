@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 public class FileBasedTests {
     
     private ProgramBuilder programBuilder = new ProgramBuilder();
-    private Environment.Builder environmentBuilder = new Environment.Builder().withLogging(true);
+    private Environment.Builder environmentBuilder = new Environment.Builder().withLogging(false);
     
     @Test
     public void factorial() {
